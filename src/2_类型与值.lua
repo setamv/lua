@@ -100,6 +100,17 @@ polylineAlias = {
 }
 print("", "polyline", "polyline[2].x = " .. polyline[2].x, "polylineAlias[2].x = " .. polylineAlias[2].x)
 
+-- 可以使用 next 函数结合while遍历一个表格中的所有元素
+print("", "traverse table")
+local k, v
+while true do
+    k, v = next(polyline, k)
+    if k == nil then
+        break
+    end
+    print("", "", "k = " .. tostring(k) .. ", v = " .. tostring(v))
+end
+
 -- table初始化的时候，可以使用分号代替逗号，通常将分号用于分隔构造式中不同的成分，例如将数组部分与指定索引的部分分开，如下所示：
 anyTbl = {
     x = 10, y = 45;         -- 指定索引的部分
