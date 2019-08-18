@@ -7,7 +7,7 @@
 
 ------------------------------------ 编译 ----------------------------------
 -- Lua是一种解释性语言，衡量解释性语言的主要特征在于它是否有能力执行动态生成的代码。
--- Lua中有dofile和loadfile两个函数可用于执行动态生成的代码
+-- Lua中的dofile、loadfile、loadstring函数可用于执行动态生成的代码
 -- dofile用于从文件中加载并运行Lua代码块
 -- loadfile用于从文件中加载Lua代码块，并对代码进行编译，将编译的结果作为一个函数返回。它不会运行加载的Lua代码，但是可以通过调用loadfile编译结果返回的函数来运行。
 -- 如果需要多次运行同一个文件中的Lua代码，使用loadfile只需要编译一次，开销会小很多
@@ -32,30 +32,24 @@ f('a', 'b', 'c')            -- 前面两个参数'a'和'b'将赋值给loadstring
 ------------------------------------ 错误 ----------------------------------
 print("错误")
 -- Lua作为一种扩展语言，通常嵌入在应用程序中，因此，在发生错误时它不能简单地崩溃或退出，相反，Lua应该结束当前程序块并返回应用程序。
--- Lua通过调用error函数可以显示的引发一个错误
--- if not n then error("invalid input") end     -- 这段代码将引发一个错误，程序将终止执行
+-- Lua通过调用error函数可以显示的引发一个错误，如下面的代码所示：这段代码将引发一个错误，程序将终止执行。
+-- if not n then error("invalid input") end
+-- error函数的参数可以是一个字符串或其他类型的值，但是只有字符串时，Lua才会在错误信息中附加错误发生的位置。
 -- Lua中有一个专门的函数 assert(<condition>, <msg>)，其等价于 if not <condition> then error(<msg>) end
 -- assert函数检查第一个参数是否为true，若为true，则简单的返回该参数；否则，就引发一个错误，assert的第二个参数是一个可选的值（不一定是字符串），它将出现在错误信息中。
 -- assert(n, "invalid input")                   -- 这段代码将引发一个错误，程序将终止执行
 
 -- pcall函数用于捕获函数执行过程中发生的错误，pcall(f, arg1, ... argn)，其中，第一个参数为需要执行的函数名称，后面的参数将作为实参传递给函数f
-function anyError(type)             -- 当传入1时，引发错误，错误信息为一个对象；为2时，错误信息为一个字符串。所以为2的时候，Lua才会附加错误发生的位置信息
+-- pcall函数将返回两个值，当函数f执行过程中发生错误时，第一个值为false，第二个值为错误信息（该错误信息不回包含错误栈）；否则第一个值true第二个值为函数f返回的结果
+-- 下面定义的函数anyError，当传入1时，引发错误，错误信息为一个对象；为2时，错误信息为一个字符串。所以为2的时候，Lua才会附加错误发生的位置信息
+function anyError(type)
     if type == 1 then error({code = 9999, message = "error happend"})
-    else error("error happend")
+    elseif type == 2 then error("error happend")
+    else return {message = "OK"}
     end
 end
 r, err = pcall(anyError, 2)
-if r then
-    -- foo()执行没有发生错误，走这里
-    print("", "pcall", "ok", "r = " .. tostring(r))
-else
-    -- foo()执行发生错误了，执行这里
-    if type(err) == 'table' then
-        print("", "pcall", "err", "code = " .. err.code .. ", message = " .. err.message)
-    else
-        print("", "pcall", "err", err)
-    end
-end
+print("", "pcall", "r = " .. tostring(r) .. ", err = " .. tostring(err))
 
 ------------------------------------ 错误消息与追溯 ----------------------------------
 print("\n错误消息与追溯")

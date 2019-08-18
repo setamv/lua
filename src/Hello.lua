@@ -4,3 +4,5 @@
 --- DateTime: 2019/8/10 11:39
 ---
 print("Hello World!")
+
+print(type({}))

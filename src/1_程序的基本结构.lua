@@ -13,7 +13,7 @@ print("注释块中的代码")
 --]]
 
 ------------------------------------ 标识符 ----------------------------------
--- 标识符可以是任意字母、数字和下划线构成的字符串，不嫩以数字开头，大小写敏感
+-- 标识符可以是任意字母、数字和下划线构成的字符串，不能以数字开头，大小写敏感
 -- Lua的保留字包括：and break do else elseif end false for function if in local nil not or repeat return then true until while
 
 ------------------------------------ 程序块 ----------------------------------
@@ -34,6 +34,6 @@ print(globalVar)  -- 将输出 nil
 -- 如果代码文件的第一行以井号“#”开头，那么在加载该文件时，解释器将忽略这一行，类似于linux shell脚本文件，这样的Lua文件也可以像shell脚本一样直接执行，而不需要指定Lua解释器
 -- 假设以下注释块为一个Lua脚本文件（script.lua）的内容，则，可以直接在linux执行 `$ script.lua` 即可。 其中，第一行内容和linux shell相似。
 --[[
-#!/user/bin/env lua
+#!/usr/bin/env lua
 print("hello world")
 --]]
